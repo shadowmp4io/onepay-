@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f0f16">
+<title>OnePay</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f0f16;--tx:#eef0fa;--mu:#9ea0ba;--ac:#c3c8ff;--sp:cubic-bezier(.34,1.56,.64,1);--ez:cubic-bezier(.22,1,.36,1);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;scrollbar-width:none}
+*::-webkit-scrollbar{display:none}
+html,body{height:100dvh;margin:0;background:radial-gradient(900px 600px at 50% 0,#22225a,#08080c 70%);color:var(--tx);font-family:'Plus Jakarta Sans',system-ui,sans-serif;overflow:hidden}
+body{display:flex;align-items:center;justify-content:center}
+#app{position:relative;width:100%;height:100%;max-width:430px;background:var(--bg);overflow:hidden;isolation:isolate;touch-action:none}
+@media(min-width:600px){#app{height:min(900px,94vh);border-radius:46px;box-shadow:0 0 0 10px #07070a,0 0 0 11px #2c2c3a,0 60px 140px #000b}}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}.i.b{stroke-width:3.4}
+.g{background:linear-gradient(135deg,#ffffff2a,#ffffff0b);backdrop-filter:blur(26px) saturate(1.9);-webkit-backdrop-filter:blur(26px) saturate(1.9);border:1px solid #ffffff22;box-shadow:inset 0 1px 0 #ffffff5c,inset 0 -10px 18px #ffffff08,0 12px 34px #0006}
+.pr{transition:transform .55s var(--sp),filter .3s}.pr:active{transform:scale(.9)!important;filter:brightness(1.3)}
+.bg{position:absolute;inset:0;overflow:hidden;z-index:-1}.bg i{position:absolute;width:440px;height:440px;border-radius:50%;filter:blur(64px);will-change:transform;opacity:.5;animation:fl 16s ease-in-out infinite alternate}
+.bg i:nth-child(1){background:#4938d8;left:-140px;top:-80px}.bg i:nth-child(2){background:#b8408c;right:-180px;top:42%;animation-delay:-6s}.bg i:nth-child(3){background:#2a86c8;left:5%;bottom:-220px;animation-delay:-11s}
+@keyframes fl{to{transform:translate(70px,-80px) scale(1.25)}}
+[data-v]{opacity:0;pointer-events:none;transform:translateY(14px) scale(.96);transition:opacity .4s,transform .75s var(--sp)}
+[data-s=home] [data-v~=home],[data-s=pay] [data-v~=pay],[data-s=stack] [data-v~=stack],[data-s=det] [data-v~=det]{opacity:1;pointer-events:auto;--pe:auto;transform:none}
+.tb{position:absolute;left:0;right:0;top:20px;display:flex;justify-content:space-between;align-items:center;padding:0 20px;z-index:40;height:54px}
+.tb[data-v]{pointer-events:none!important}.tb>*{pointer-events:var(--pe,none);transition:opacity .35s,transform .6s var(--sp)}.mo .tb>*:last-child{opacity:0;transform:scale(.7)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:21px;letter-spacing:-.5px}
+.mk{width:38px;height:38px;border-radius:13px;background:conic-gradient(from 200deg,#6c7bff,#a06bff,#ff7ab8,#ffb86b,#6c7bff);display:grid;place-items:center;box-shadow:0 6px 26px #6c7bff66}.mk i{width:15px;height:15px;border-radius:50%;background:var(--bg)}
+.cb{width:48px;height:48px;border-radius:50%;display:grid;place-items:center}
+.av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:700}
+#cards{position:absolute;inset:0;perspective:900px;pointer-events:none;z-index:10}
+.card{position:absolute;left:50%;top:0;margin-left:calc(var(--cw)/-2);width:var(--cw);aspect-ratio:1.586;container-type:inline-size;border-radius:calc(var(--cw)*.07);color:#fff;overflow:hidden;transform-origin:50% 0;pointer-events:auto;cursor:pointer;will-change:transform;box-shadow:0 24px 50px -14px #000b,inset 0 0 0 1px #ffffff26,inset 0 1px 0 #ffffff50}
+.card>*{pointer-events:none}
+.k0{background:linear-gradient(105deg,#76767a 0,#2c2a2c 38%,#171517 72%)}
+.k1{background:conic-gradient(from 205deg at 60% 94%,#0a1790,#2060f0,#a8e8ff 13%,#2060f0 27%,#0a1790 48%,#0a1790)}
+.k2{background:linear-gradient(135deg,#f1f3f6 0 56%,#d5dadf 56%);color:#14141c}
+.sh{position:absolute;inset:0;background:#000;opacity:0}.gl{position:absolute;inset:0;background:radial-gradient(circle at var(--gx,25%) var(--gy,0%),#ffffff38,transparent 58%)}
+.cl{position:absolute;left:6cqw;top:6cqw;display:flex;align-items:center;gap:.35em;font-weight:700;font-size:7.2cqw;letter-spacing:-.04em}.cl .i{width:1em;height:1em;stroke-width:3}
+.ct{position:absolute;left:6cqw;top:52%;font-size:3.8cqw;font-weight:500;letter-spacing:.03em;opacity:.9}.cn{position:absolute;left:6cqw;bottom:5.5cqw;font-size:4.4cqw;opacity:.9}
+.cv{position:absolute;right:6cqw;bottom:4.5cqw;font-size:10cqw;font-weight:800;font-style:italic;letter-spacing:-.05em}
+.pill{position:absolute;left:0;right:0;margin:auto;width:fit-content;top:var(--pt);display:flex;align-items:center;gap:12px;padding:11px 22px 11px 12px;border-radius:99px;font-weight:600;font-size:15px;z-index:20}
+.nf{width:32px;height:32px;border-radius:50%;background:var(--ac);color:#22244c;display:grid;place-items:center}.nf .i{width:17px;height:17px;stroke-width:2.6}
+.dock{position:absolute;left:0;right:0;margin:auto;width:fit-content;bottom:32px;display:flex;gap:4px;z-index:20}
+.dock button{height:62px;color:var(--ac);font-weight:600;font-size:17px;display:grid;place-items:center}
+.dock .a{padding:0 38px;border-radius:99px 10px 10px 99px}.dock .b{width:82px;border-radius:10px 99px 99px 10px}.dock .i{width:28px;height:28px}
+.mng{position:absolute;left:0;right:0;margin:auto;width:fit-content;bottom:34px;padding:15px 26px;border-radius:99px;color:var(--ac);font-weight:600;display:flex;gap:8px;align-items:center;z-index:30}
+.mng .i{width:20px;height:20px;animation:bn 1.8s var(--ez) infinite}@keyframes bn{50%{transform:translateY(4px)}}
+[data-s=stack] .mng .i{transform:rotate(180deg);animation:none}
+.orb,.ring{position:absolute;left:50%;top:var(--ot);width:124px;height:124px;margin-left:-62px;border-radius:50%}
+.orb{background:#434d6ccc;display:grid;place-items:center;z-index:5;transition:opacity .4s,transform .8s var(--sp),background .5s;transform:scale(.4)}
+.orb>*{position:absolute;transition:opacity .45s,transform .7s var(--sp)}
+.ph{width:46px;height:74px;border-radius:12px;background:#10111a;border:3px solid #8091d6}
+.wv,.ck{width:58px;height:58px;opacity:0;transform:scale(.4)}.wv{color:#92a4e6;stroke-width:2.4}.ck{color:#08301b;stroke-width:3;stroke-dasharray:30;stroke-dashoffset:30}
+.rdy .ph{opacity:0;transform:scale(.4) rotate(-20deg)}.rdy .wv{opacity:1;transform:none}
+.ok .orb{background:#7be0a6}.ok .wv,.ok .ph{opacity:0}.ok .ck{opacity:1;transform:none;stroke-dashoffset:0;transition:stroke-dashoffset .6s .15s,opacity .3s,transform .7s var(--sp)}
+.ring{background:#5a6cb055;opacity:0;pointer-events:none}.rdy:not(.ok)[data-s=pay] .ring{animation:rg 2.6s var(--ez) infinite}.ring+.ring{animation-delay:.9s!important}
+@keyframes rg{0%{transform:scale(.8);opacity:.7}100%{transform:scale(2.5);opacity:0}}
+.lbl{position:absolute;left:0;right:0;top:var(--lt);text-align:center;font-weight:600;color:var(--ac);z-index:5}
+.amt{position:absolute;left:0;right:0;top:calc(var(--lt) + 44px);text-align:center;font-size:40px;font-weight:700;letter-spacing:-1px;z-index:5;opacity:0;transform:translateY(16px) scale(.9);transition:.8s var(--sp)}.ok .amt{opacity:1;transform:none}
+.pw{position:absolute;left:0;right:0;bottom:0;z-index:20;overflow:hidden;will-change:transform}.panel{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;padding:22px 20px 64px;touch-action:pan-y}.fx{position:absolute;left:0;right:0;pointer-events:none;opacity:0;transition:opacity .3s}.fx::before,.fx::after{content:"";position:absolute;inset:0}.fx.t{top:0;height:64px;background:linear-gradient(#0f0f16b0,transparent)}.fx.b{bottom:0;height:80px;background:linear-gradient(to top,#0f0f16b0,transparent)}.fx.t::before{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);-webkit-mask:linear-gradient(#000 20%,transparent);mask:linear-gradient(#000 20%,transparent)}.fx.t::after{backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);-webkit-mask:linear-gradient(#000,transparent);mask:linear-gradient(#000,transparent)}.fx.b::before{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);-webkit-mask:linear-gradient(to top,#000 20%,transparent);mask:linear-gradient(to top,#000 20%,transparent)}.fx.b::after{backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);-webkit-mask:linear-gradient(to top,#000,transparent);mask:linear-gradient(to top,#000,transparent)}
+h3{color:var(--mu);font-size:15px;font-weight:600;margin:26px 6px 12px}
+.list{display:grid;gap:3px}
+.row{display:flex;align-items:center;gap:16px;padding:16px 18px;width:100%;text-align:left;background:linear-gradient(135deg,#ffffff1c,#ffffff09);border:1px solid #ffffff14;box-shadow:inset 0 1px 0 #ffffff30}
+.row:first-child{border-radius:26px 26px 7px 7px}.row:last-child{border-radius:7px 7px 26px 26px}.row:only-child{border-radius:26px}
+.ic{width:48px;height:48px;border-radius:16px;background:#0f0f1699;display:grid;place-items:center;color:#cfd2f0;flex:none}
+.row b{display:block;font-weight:600}.row small{color:var(--mu)}.row em{margin-left:auto;font-style:normal;font-weight:600}
+.row.l{justify-content:center;color:var(--ac);font-weight:600;padding:22px}
+[data-s=det] .sa,.an,.ad .opt{animation:up .85s var(--sp) both;animation-delay:var(--d,0s)}@keyframes up{from{opacity:0;transform:translateY(34px) scale(.96);filter:blur(8px)}}
+.emp{text-align:center;padding:26px 22px;border-radius:28px;font-weight:600;font-size:19px;line-height:1.35}
+.stk{height:100px;position:relative;margin-bottom:14px;perspective:600px}.stk i{position:absolute;left:50%;width:150px;height:78px;margin-left:-75px;border-radius:16px;transform:rotateX(58deg) rotateZ(-34deg)}
+.stk i:nth-child(1){top:36px;background:#1c1c28}.stk i:nth-child(2){top:24px;background:#6d7390}.stk i:nth-child(3){top:12px;background:#15151e}.stk i:nth-child(4){top:0;background:#2b2b3a;box-shadow:0 0 0 1px #ffffff1a}
+.btn{background:#c3c8ff;color:#1e2048;font-weight:700;padding:17px 34px;border-radius:99px;margin-top:20px;display:inline-block;box-shadow:0 10px 30px #8c94ff55}
+.scrim{position:absolute;inset:0;background:#000a;opacity:0;pointer-events:none;transition:opacity .5s;z-index:50}.ad .scrim{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:0;right:0;bottom:0;height:min(84%,720px);z-index:60;border-radius:36px 36px 0 0;padding:20px;background:linear-gradient(160deg,#ffffff30,#ffffff10),#1a1a26cc;touch-action:pan-y;will-change:transform;overflow-y:auto}
+.sheet h1{font-size:32px;font-weight:600;letter-spacing:-1px;margin:18px 6px 22px}
+.opt{display:flex;gap:18px;align-items:center;width:100%;text-align:left;padding:20px;background:linear-gradient(135deg,#ffffff1f,#ffffff08);border:1px solid #ffffff14;box-shadow:inset 0 1px 0 #ffffff30}
+.opt:first-child{border-radius:28px 28px 7px 7px}.opt:last-child{border-radius:7px 7px 28px 28px}
+.opt .ic{width:54px;height:54px;border-radius:50%;background:#ffffff14;color:var(--ac)}.opt b{display:block;font-size:18px;font-weight:600}.opt small{color:var(--mu);font-size:14px;line-height:1.3}
+#toast{position:absolute;left:0;right:0;margin:auto;width:fit-content;bottom:110px;padding:14px 24px;border-radius:99px;font-weight:600;z-index:90;opacity:0;transform:translateY(30px) scale(.85);transition:.7s var(--sp);pointer-events:none}#toast.on{opacity:1;transform:none}
+#mn{position:absolute;right:20px;top:23px;width:48px;height:48px;border-radius:24px;overflow:hidden;z-index:80;opacity:0;pointer-events:none;transition:opacity .2s;background:linear-gradient(135deg,#ffffff3a,#ffffff10),#1c1c2cd0}.mo #mn{opacity:1;pointer-events:auto}#ms{position:absolute;inset:0;z-index:79;display:none}.mo #ms{display:block}.mi{position:absolute;right:0;top:0;width:48px;height:48px;display:grid;place-items:center;transition:opacity .2s}.mo .mi{opacity:0}.ml{position:absolute;right:0;top:0;width:252px;padding:8px}.mt{display:flex;align-items:center;gap:14px;width:100%;height:52px;padding:0 14px;border-radius:18px;font-weight:600;font-size:16px;opacity:0;filter:blur(8px);transform:translateY(-8px) scale(.96);transition:opacity .3s,filter .4s,transform .6s var(--sp),background .2s}.mo .mt{opacity:1;filter:none;transform:none;transition-delay:calc(var(--i)*.045s + .06s),calc(var(--i)*.045s + .06s),calc(var(--i)*.045s + .06s),0s}.mt:active{background:#ffffff22}.mt.r{color:#ff8f9b}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div id="app" data-s="home">
+<div class="bg"><i></i><i></i><i></i></div>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="back" viewBox="0 0 24 24"><path d="M19 12H5M11 5.500L4.500 12 11 18.500"/></symbol>
+<symbol id="x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+<symbol id="dots" viewBox="0 0 24 24"><path d="M12 5.500v.01M12 12v.01M12 18.500v.01"/></symbol>
+<symbol id="sl" viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 17h1M11 17h9"/><circle cx="16" cy="7" r="2.500"/><circle cx="8" cy="17" r="2.500"/></symbol>
+<symbol id="nfc" viewBox="0 0 24 24"><path d="M8 8.500c1.500 2.200 1.500 4.800 0 7M12 5.500c3 3.600 3 9.400 0 13M16 3c4.500 5 4.500 13 0 18"/></symbol>
+<symbol id="store" viewBox="0 0 24 24"><path d="M4 9.500L5.500 4h13L20 9.500M4 9.500a2.700 2.700 0 005.300 0 2.700 2.700 0 005.400 0 2.700 2.700 0 005.300 0M5.500 12.500V20h13v-7.500M10 20v-4.500h4V20"/></symbol>
+<symbol id="card" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3.500"/><path d="M3 10h18M7 15h3"/></symbol>
+<symbol id="train" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="14" rx="4"/><path d="M5 11h14M8 21l2-4M16 21l-2-4M9 14h.01M15 14h.01"/></symbol>
+<symbol id="tag" viewBox="0 0 24 24"><path d="M3 12.500V4h8.500l9 9a1.500 1.500 0 010 2.100l-6.400 6.400a1.500 1.500 0 01-2.100 0z"/><path d="M7.500 8.500h.01"/></symbol>
+<symbol id="gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4.500" rx="1.500"/><path d="M5 12.500V20h14v-7.500M12 8v12M12 8c-3.500 0-4.500-4-2-4 2.300 0 2 4 2 4zM12 8c3.500 0 4.500-4 2-4-2.300 0-2 4-2 4z"/></symbol>
+<symbol id="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+<symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="check" viewBox="0 0 24 24"><path d="M5 12.500l4.500 4.500L19 7"/></symbol>
+<symbol id="ring" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="1.600"/></symbol>
+<symbol id="star" viewBox="0 0 24 24"><path d="M12 3.500l2.600 5.400 5.900.8-4.300 4.100 1 5.800-5.200-2.800-5.200 2.800 1-5.800-4.300-4.100 5.900-.8z"/></symbol>
+<symbol id="edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16zM13.500 6.500l4 4"/></symbol>
+<symbol id="lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="3"/><path d="M8 11V8a4 4 0 018 0v3"/></symbol>
+<symbol id="trash" viewBox="0 0 24 24"><path d="M5 7h14M10 7V4.500h4V7M7 7l.8 12h8.400L17 7M10.500 11v5M13.500 11v5"/></symbol>
+</defs></svg>
+
+<div class="tb" data-v="home"><div class="logo"><div class="mk"><i></i></div>OnePay</div><div class="av g">O</div></div>
+<div class="tb" data-v="pay stack"><button class="cb g pr" data-x><svg class="i"><use href="#x"/></svg></button><button class="cb g pr" data-m><svg class="i"><use href="#sl"/></svg></button></div>
+<div class="tb" data-v="det"><button class="cb g pr" data-x><svg class="i"><use href="#back"/></svg></button><button class="cb g pr" data-m><svg class="i b"><use href="#dots"/></svg></button></div>
+
+<div class="ring"></div><div class="ring"></div>
+<div class="orb" data-v="pay" id="orb"><div class="ph"></div><svg class="i wv"><use href="#nfc"/></svg><svg class="i ck"><use href="#check"/></svg></div>
+<div id="cards"></div>
+<div class="lbl" data-v="pay" id="lbl"></div><div class="amt">3,20 €</div>
+<div class="pill g pr" data-v="home" id="pill"><div class="nf"><svg class="i"><use href="#nfc"/></svg></div>Placez sur le lecteur</div>
+<div class="dock" data-v="home"><button class="a g pr" id="more">Voir plus</button><button class="b g pr" id="add"><svg class="i"><use href="#plus"/></svg></button></div>
+<button class="mng g pr" data-v="pay stack" id="mng">Gérer les modes de paiement<svg class="i"><use href="#chev"/></svg></button>
+
+<div class="pw" id="panel"><div class="panel" id="ps">
+  <div class="row sa" style="border-radius:26px;--d:.1s"><div class="nf"><svg class="i"><use href="#nfc"/></svg></div><b style="font-weight:500">Carte par défaut pour le paiement sans contact</b></div>
+  <h3>Transactions</h3><div class="list" id="tx"></div>
+  <h3>Pass</h3>
+  <div class="emp g sa" style="--d:.35s"><div class="stk"><i></i><i></i><i></i><i></i></div>Commencez à ajouter des cartes de fidélité, des titres de transport et plus encore<br><button class="btn pr" id="add2">Ajouter à OnePay</button></div>
+</div><div class="fx t" id="fxt"></div><div class="fx b" id="fxb"></div></div>
+
+<div id="ms"></div>
+<div id="mn" class="g"><div class="mi"><svg class="i b"><use href="#dots"/></svg></div><div class="ml">
+<button class="mt" style="--i:0" data-t="Carte définie par défaut"><svg class="i"><use href="#star"/></svg>Carte par défaut</button>
+<button class="mt" style="--i:1" data-t="Renommer · bientôt disponible"><svg class="i"><use href="#edit"/></svg>Renommer</button>
+<button class="mt" style="--i:2" data-t="Carte verrouillée"><svg class="i"><use href="#lock"/></svg>Verrouiller la carte</button>
+<button class="mt r" style="--i:3" data-t="Suppression indisponible en démo"><svg class="i"><use href="#trash"/></svg>Supprimer</button>
+</div></div>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet g" id="sheet">
+  <button class="cb g pr" id="sb"><svg class="i"><use href="#back"/></svg></button>
+  <h1>Ajouter à OnePay</h1>
+  <div class="list">
+    <button class="opt pr" style="--d:.05s"><div class="ic"><svg class="i"><use href="#card"/></svg></div><span><b>Carte de paiement</b><small>Payez partout où OnePay est accepté</small></span></button>
+    <button class="opt pr" style="--d:.1s"><div class="ic"><svg class="i"><use href="#train"/></svg></div><span><b>Titre de transport</b><small>Prenez les transports avec votre téléphone</small></span></button>
+    <button class="opt pr" style="--d:.15s"><div class="ic"><svg class="i"><use href="#tag"/></svg></div><span><b>Carte de fidélité</b><small>Gagnez des récompenses et des points</small></span></button>
+    <button class="opt pr" style="--d:.2s"><div class="ic"><svg class="i"><use href="#gift"/></svg></div><span><b>Carte cadeau</b><small>Payez vos achats avec une carte cadeau</small></span></button>
+  </div>
+</div>
+<div id="toast" class="g"></div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s),A=$('#app'),pan=$('#panel'),ps=$('#ps'),mn=$('#mn'),sheet=$('#sheet'),hap=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
+const D=[['DEBIT','k0','••1340'],['PRO • VIRTUAL','k1','••4821'],['BUSINESS','k2','••7702']];
+const TX=[['Boulangerie des Alpes','3,10 €','16 oct.'],['Café du Centre','3,50 €','16 oct.'],['Tabac Presse','1,32 €','15 oct.']],MORE=[['Pharmacie de la Vallée','12,80 €','14 oct.'],['Station Total','54,00 €','13 oct.'],['Cinéma Le Rex','9,50 €','12 oct.']];
+/* spring engine */
+const P=[];let last=0,run=false;
+const sp=(v,k=250,c=20)=>{const s={v,t:v,u:0,k,c};P.push(s);return s};
+function tick(n){const dt=Math.min((n-last)/1000,.033);last=n;let on=false;
+ for(const s of P){for(let i=0;i<3;i++){s.u+=((s.t-s.v)*s.k-s.u*s.c)*dt/3;s.v+=s.u*dt/3}
+  if(Math.abs(s.t-s.v)>.02||Math.abs(s.u)>.02)on=true;else{s.v=s.t;s.u=0}}
+ render();if(on)requestAnimationFrame(tick);else run=false}
+const kick=()=>{if(!run){run=true;last=performance.now();requestAnimationFrame(tick)}};
+let W,H,cw,ch,act=0,st='home',dr=0,T,prs=-1;
+const pY=sp(3000,200,24),sY=sp(3000,210,23),mw=sp(48,320,24),mh=sp(48,320,24),mr=sp(24,320,24);
+const cont=$('#cards'),K=D.map((d,i)=>{const el=document.createElement('div');el.className='card '+d[1];el.dataset.i=i;
+ el.innerHTML=`<div class="gl"></div><div class="cl"><svg class="i"><use href="#ring"/></svg>OnePay</div><div class="ct">${d[0]}</div><div class="cn">${d[2]}</div><div class="cv">VISA</div><div class="sh"></div>`;
+ cont.appendChild(el);return{el,sh:el.querySelector('.sh'),y:sp(-400,230,19),s:sp(.9,260,20),o:sp(0,200,24),h:sp(0,200,24),rx:sp(0,180,16),ry:sp(0,180,16)}});
+function pos(){const n=D.length,o=Math.max(30,Math.min(ch*.68,(H-ch-250)/(n-1))),tot=ch+o*(n-1);
+ return{hT:Math.max(170,H*.22),pT:Math.max(236,H*.34),sT:Math.max(84,(H-tot)/2-26),o,dT:84}}
+function lay(){const p=pos(),n=D.length;
+ K.forEach((c,i)=>{const r=(i-act+n)%n;let y,s=1,o=1,h=0;
+  if(st=='home'){y=p.hT-r*36;s=1-r*.055;h=r*.32;o=r>2?0:1}
+  else if(st=='stack'){y=p.sT+(n-1-r)*p.o}
+  else{y=st=='det'?p.dT:p.pT;if(r){y+=10;s=.9;o=0}}
+  c.y.t=y+(r?0:dr);c.s.t=i==prs?s*.965:s;c.o.t=o;c.h.t=h;c.el.style.zIndex=10-r});
+ A.style.setProperty('--ot',p.pT-152+'px');A.style.setProperty('--lt',p.pT+ch+20+'px');A.style.setProperty('--pt',p.hT+ch+28+'px');
+ pan.style.top=p.dT+ch+10+'px';$('#lbl').textContent='OnePay '+D[act][2];kick()}
+function render(){K.forEach(c=>{c.el.style.transform=`translate3d(0,${c.y.v}px,0) scale(${c.s.v}) rotateX(${c.rx.v}deg) rotateY(${c.ry.v}deg)`;c.el.style.opacity=Math.max(0,Math.min(1,c.o.v));c.sh.style.opacity=Math.max(0,c.h.v)});
+ pan.style.transform=`translateY(${pY.v}px)`;sheet.style.transform=`translateY(${sY.v}px)`;mn.style.width=mw.v+'px';mn.style.height=mh.v+'px';mn.style.borderRadius=mr.v+'px'}
+function measure(){W=A.clientWidth;H=A.clientHeight;cw=Math.min(W*.9,430,H*.78);ch=cw/1.586;A.style.setProperty('--cw',cw+'px');pY.t=pY.v=st=='det'?0:H+60;sY.t=sY.v=A.classList.contains('ad')?0:H+60;lay();render()}
+function go(s){if(s==st)return;menu(false);const w=st;st=s;A.dataset.s=s;dr=0;hap(s=='stack'?[8,24,8]:12);
+ if(s=='pay'&&w!='stack'){A.classList.remove('rdy','ok');clearTimeout(T);T=setTimeout(()=>{A.classList.add('rdy');hap([6,40,6])},1000)}
+ if(s!='pay'&&s!='stack'){A.classList.remove('rdy','ok');clearTimeout(T)}
+ pY.t=s=='det'?0:H+60;lay()}
+/* interactions */
+let pd=null;
+A.addEventListener('pointerdown',e=>{if(e.target.closest('button,.pw,.sheet,.pill,#mn'))return;pd={y:e.clientY,x:e.clientX,c:e.target.closest('.card'),o:e.target.closest('.orb')};prs=pd.c?+pd.c.dataset.i:-1;lay()});
+addEventListener('pointermove',e=>{if(!pd)return;if(st=='pay'){dr=Math.max(-14,Math.min(80,(e.clientY-pd.y)*.45));lay()}});
+addEventListener('pointercancel',()=>{pd=null;prs=-1;dr=0;lay()});
+addEventListener('pointerup',e=>{if(!pd)return;const d=e.clientY-pd.y,ax=Math.abs(e.clientX-pd.x),c=pd.c,o=pd.o;pd=null;prs=-1;dr=0;
+ if(Math.abs(d)>46&&Math.abs(d)>ax){if(st=='pay'&&d>0)go('stack');else if(st=='stack'&&d<0)go('pay');else if(st=='home'){act=(act+(d<0?1:2))%D.length;hap(14);lay()}else lay();return}
+ if(Math.abs(d)<10&&ax<10){const i=c?+c.dataset.i:-1;
+  if(st=='home'&&c){if(i==act)go('pay');else{act=i;hap(14);lay()}}
+  else if(st=='stack'&&c){act=i;go('pay')}
+  else if(st=='pay'&&(c||o)){lay();pay()}else lay()}else lay()});
+A.addEventListener('pointermove',e=>{if(pd||e.pointerType=='touch')return;const c=K[act],b=c.el.getBoundingClientRect(),x=(e.clientX-b.left)/b.width-.5,y=(e.clientY-b.top)/b.height-.5,n=Math.abs(x)<.5&&Math.abs(y)<.5&&(st=='home'||st=='pay');
+ c.ry.t=n?x*16:0;c.rx.t=n?-y*14:0;c.el.style.setProperty('--gx',(x+.5)*100+'%');c.el.style.setProperty('--gy',(y+.5)*100+'%');kick()});
+function pay(){if(!A.classList.contains('rdy')||A.classList.contains('ok'))return;A.classList.add('ok');hap([18,40,18,40,80]);lay();K[act].y.u=-650;K[act].s.u=-3;
+ TX.unshift(['Paiement OnePay','3,20 €','Aujourd’hui']);tx();setTimeout(()=>{go('home');toast('Paiement de 3,20 € effectué')},2200)}
+let more=false;
+function tx(f=999){const L=more?TX.concat(MORE):TX.slice(0,3);
+ $('#tx').innerHTML=L.map((t,i)=>`<div class="row${i>=f?' an':''}" style="--d:${.12+(i>=f?(i-f)*.07:0)}s"><div class="ic"><svg class="i"><use href="#store"/></svg></div><div><b>${t[0]}</b><small>${t[2]}</small></div><em>${t[1]}</em></div>`).join('')+(more?'':`<button class="row l pr" id="mr">Afficher plus de transactions</button>`);
+ const m=$('#mr');if(m)m.onclick=()=>{more=true;hap(10);tx(3)};fx()}
+const openAdd=()=>{A.classList.add('ad');sY.t=0;hap(12);kick()},closeAdd=()=>{A.classList.remove('ad');sY.t=H+60;hap(8);kick()};
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2300)}
+const fxt=$('#fxt'),fxb=$('#fxb');
+function fx(){const m=ps.scrollHeight-ps.clientHeight-ps.scrollTop;fxt.style.opacity=Math.min(1,ps.scrollTop/26);fxb.style.opacity=Math.max(0,Math.min(1,m/26))}
+ps.addEventListener('scroll',fx,{passive:true});
+function menu(o){if(o==A.classList.contains('mo'))return;A.classList.toggle('mo',o);mw.t=o?252:48;mh.t=o?224:48;mr.t=o?28:24;hap(o?[8,22,8]:6);kick()}
+document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>menu(!A.classList.contains('mo')));
+$('#ms').onclick=()=>menu(false);
+document.querySelectorAll('.mt').forEach(b=>b.onclick=()=>{hap([10,30,10]);menu(false);toast(b.dataset.t)});
+$('#pill').onclick=()=>go('pay');$('#more').onclick=()=>{more=false;ps.scrollTop=0;go('det');tx(0)};
+$('#add').onclick=openAdd;$('#add2').onclick=openAdd;$('#sb').onclick=closeAdd;$('#scrim').onclick=closeAdd;
+$('#mng').onclick=()=>go(st=='pay'?'stack':'pay');
+document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>go(st=='det'?'home':'home'));
+document.querySelectorAll('.opt').forEach(o=>o.onclick=()=>{hap([10,40,10]);toast(o.querySelector('b').textContent+' · bientôt disponible')});
+document.addEventListener('pointerdown',e=>{if(e.target.closest('button,.pill'))hap(7)});
+addEventListener('keydown',e=>{if(e.key=='Escape')A.classList.contains('mo')?menu(false):A.classList.contains('ad')?closeAdd():go('home');if(e.key=='Enter'&&st=='home')go('pay');if(e.key=='ArrowDown'&&st=='pay')go('stack');if(e.key=='ArrowUp'&&st=='stack')go('pay')});
+new ResizeObserver(measure).observe(A);
+tx();measure();
+/* intro: cards drop in */
+K.forEach((c,i)=>{c.y.v=-300;c.o.v=0;c.s.v=.85});setTimeout(()=>{kick()},50);
+</script>
+</body>
+</html>
+  
